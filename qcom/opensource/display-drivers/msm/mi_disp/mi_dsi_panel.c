@@ -771,7 +771,7 @@ int mi_dsi_panel_update_cmd_set(struct dsi_panel *panel,
 	if (cmds && count > info->index) {
 		tx_buf = (u8 *)cmds[info->index].msg.tx_buf;
 		tx_len = cmds[info->index].msg.tx_len;
-		if (tx_buf && tx_buf[0] == info->mipi_address && tx_len >= info->length) {
+		if (tx_buf && tx_buf[0] == info->mipi_address && tx_len >= info->length + 1) {
 			memcpy(&tx_buf[1], payload, info->length);
 			for (i = 0; i < tx_len; i++) {
 				DISP_DEBUG("[%s] tx_buf[%d] = 0x%02X\n",
@@ -2087,7 +2087,7 @@ static int mi_dsi_update_lhbm_cmd_87reg(struct dsi_panel *panel,
 			panel->type, cmd_set_prop_map[info->type],
 			info->mipi_address, info->index, info->length);
 		if (info && info->mipi_address != 0x87) {
-			DISP_ERROR("[%s] error mipi address (0x%02X)\n", panel->type, info->mipi_address);
+			DISP_DEBUG("[%s] error mipi address (0x%02X)\n", panel->type, info->mipi_address);
 			info++;
 			continue;
 		} else {
@@ -2256,7 +2256,7 @@ static int mi_dsi_update_lhbm_cmd_DF_reg(struct dsi_panel *panel,
 			panel->type, cmd_set_prop_map[info->type],
 			info->mipi_address, info->index, info->length);
 		if (info && info->mipi_address != 0xDF) {
-			DISP_ERROR("[%s] error mipi address (0x%02X)\n", panel->type, info->mipi_address);
+			DISP_DEBUG("[%s] error mipi address (0x%02X)\n", panel->type, info->mipi_address);
 			info++;
 			continue;
 		} else {
@@ -2447,7 +2447,7 @@ static int mi_dsi_update_lhbm_cmd_B2_reg(struct dsi_panel *panel,
 			panel->type, cmd_set_prop_map[info->type],
 			info->mipi_address, info->index, info->length);
 		if (info && info->mipi_address != 0xB2) {
-			DISP_ERROR("[%s] error mipi address (0x%02X)\n", panel->type, info->mipi_address);
+			DISP_DEBUG("[%s] error mipi address (0x%02X)\n", panel->type, info->mipi_address);
 			info++;
 			continue;
 		} else {
@@ -3016,7 +3016,7 @@ static int mi_dsi_panel_update_lhbm_white_param(struct dsi_panel * panel,
 			panel->type, cmd_set_prop_map[info->type],
 			info->mipi_address, info->index, info->length);
 		if (info && info->mipi_address != 0xD0) {
-			DISP_ERROR("error mipi address (0x%02X)\n", info->mipi_address);
+			DISP_DEBUG("error mipi address (0x%02X)\n", info->mipi_address);
 			info++;
 			continue;
 		} else {
@@ -3040,6 +3040,7 @@ static int mi_dsi_panel_update_lhbm_white_param(struct dsi_panel * panel,
 					panel->mi_cfg.whitebuf_1000_gir_off, sizeof(panel->mi_cfg.whitebuf_1000_gir_off));
 				}
 			}
+			break;
 		}
 	}
 
